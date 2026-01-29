@@ -1,0 +1,78 @@
+# Tech Pack Image Translation System
+# Git Ignore Configuration
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Output files (regenerated)
+outputs/*
+!outputs/.gitkeep
+
+# Environment variables (contain secrets)
+.env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Model files (large)
+*.onnx
+*.pth
+*.pt
+*.h5
+*.pb
+
+# Jupyter
+.ipynb_checkpoints/
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Font files (included for portability)
+assets/fonts/*.ttf
+assets/fonts/*.otf
+assets/fonts/*.ttc
+!assets/fonts/.gitkeep

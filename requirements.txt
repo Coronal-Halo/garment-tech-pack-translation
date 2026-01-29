@@ -1,0 +1,31 @@
+# Tech Pack Image Translation System
+# Crystal International - Technical Assessment
+# Python Dependencies
+
+# Core dependencies
+numpy>=1.21.0
+opencv-python>=4.5.0
+Pillow>=9.0.0
+scipy>=1.7.0
+
+# OCR engines (choose one or install all for flexibility)
+paddleocr>=2.6.0
+paddlepaddle>=2.4.0  # CPU version; use paddlepaddle-gpu for GPU support
+# easyocr>=1.6.0  # Alternative OCR engine (optional)
+# pytesseract>=0.3.10  # Alternative OCR engine (optional)
+
+# Translation
+googletrans==4.0.0-rc1  # Google Translate (free API)
+# deepl>=1.0.0  # DeepL API (optional, requires API key)
+
+# Configuration
+PyYAML>=6.0
+
+# Logging and utilities
+tqdm>=4.64.0
+coloredlogs>=15.0  # Optional: colored logging
+
+# Development dependencies (optional)
+# pytest>=7.0.0
+# black>=22.0.0
+# flake8>=4.0.0

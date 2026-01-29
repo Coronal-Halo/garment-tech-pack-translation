@@ -1,0 +1,66 @@
+# Tech Pack Image Translation System
+# Crystal International - Technical Assessment
+# Docker Compose Configuration
+
+version: '3.8'
+
+services:
+  techpack-translator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: techpack-translator:latest
+    container_name: techpack-translator
+    
+    # Mount volumes for input/output
+    volumes:
+      - ./inputs:/app/inputs:ro    # Input images (read-only)
+      - ./outputs:/app/outputs     # Output images
+      - ./config:/app/config:ro    # Configuration (read-only)
+      - ./assets:/app/assets:ro    # Fonts and assets (read-only)
+    
+    # Environment variables (for API keys)
+    environment:
+      - GOOGLE_TRANSLATE_API_KEY=${GOOGLE_TRANSLATE_API_KEY:-}
+      - DEEPL_API_KEY=${DEEPL_API_KEY:-}
+      - PYTHONPATH=/app
+    
+    # Default command - override when running
+    command: ["--help"]
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G
+
+  # Development service with interactive shell
+  techpack-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: techpack-translator:latest
+    container_name: techpack-dev
+    
+    volumes:
+      - ./:/app
+    
+    environment:
+      - GOOGLE_TRANSLATE_API_KEY=${GOOGLE_TRANSLATE_API_KEY:-}
+      - DEEPL_API_KEY=${DEEPL_API_KEY:-}
+      - PYTHONPATH=/app
+    
+    # Interactive shell
+    stdin_open: true
+    tty: true
+    entrypoint: ["/bin/bash"]
+    
+    profiles:
+      - dev
+
+# Networks (optional, for future expansion)
+networks:
+  default:
+    name: techpack-network

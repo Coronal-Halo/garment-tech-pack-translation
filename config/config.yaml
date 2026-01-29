@@ -1,0 +1,103 @@
+# Tech Pack Translation System Configuration
+# Crystal International - Technical Assessment
+
+# General Settings
+general:
+  input_dir: "./inputs"
+  output_dir: "./outputs"
+  log_level: "INFO"
+  save_intermediate: true  # Save intermediate processing steps
+
+# OCR Settings
+ocr:
+  engine: "paddleocr"
+  language: "en"
+  confidence_threshold: 0.15    # High sensitivity
+  use_gpu: false
+  
+  # PaddleOCR specific settings (Optimized for small table text)
+  paddleocr:
+    use_angle_cls: true
+    lang: "en"
+    show_log: false
+    det_db_thresh: 0.03        # Even more sensitive
+    det_db_box_thresh: 0.05    # Catch even the faintest boxes
+    det_db_unclip_ratio: 1.8   
+    det_limit_side_len: 3200   # Max resolution for tiny text
+    det_db_score_mode: "slow"
+
+# Design Pack Detection Settings
+design_pack_detection:
+  enabled: true
+  method: "multi_feature"
+  
+  # Detection thresholds (Tuned to protect graphics while allowing table text)
+  color_variance_threshold: 0.4
+  edge_density_threshold: 0.2
+  entropy_threshold: 6.5
+  
+  # Region size constraints
+  min_region_ratio: 0.1  # Only large regions
+  max_region_ratio: 0.5
+  
+  # Margin to add around detected design pack (pixels)
+  margin: 0
+
+# Translation Settings
+translation:
+  service: "google"  # primary backend: google, deepl
+  source_language: "en"
+  target_language: "zh-CN"
+  
+  # New Feature Toggles
+  use_api: true              # Set to false to disable API translation
+  use_local_glossary: true   # Set to false to disable industry-specific glossary
+  use_smart_correction: true # Set to true to fix OCR errors like "topshitch"
+  
+  # API settings (set via environment variables for security)
+  # GOOGLE_TRANSLATE_API_KEY
+  # DEEPL_API_KEY
+  
+  # Batch processing - Smaller batch size to avoid timeouts
+  batch_size: 10
+  
+  # Terms to preserve (not translate)
+  preserve_patterns:
+    - "^[A-Z]{2,3}$"  # Only 2-3 char abbreviations like CB, CF, YKK
+    - "^\\d+(\\.\\d+)?\\s*(oz|cm|mm|L|\")?$"  # Measurements
+    - "^YKK.*$"  # Brand codes
+    - "^#[A-Fa-f0-9]{6}$"  # Color codes
+    - "^N/A$"
+    - "^[0-9]+$"  # Pure numbers
+
+# Text Rendering Settings
+rendering:
+  # Font settings for Chinese text
+  font_path: "./assets/fonts/NotoSansSC-Regular.ttf"
+  fallback_font: "SimHei"
+  
+  # Text appearance
+  default_font_size: 12
+  min_font_size: 8
+  max_font_size: 24
+  font_color: [0, 0, 0]  # RGB
+  
+  # Background color settings
+  background_bias: "white" # options: "white", "local" (white means cleaner background)
+  
+  # Text fitting
+  auto_size: true
+  padding: 2
+
+# Inpainting Settings (Retired in favor of Smart Fill, but kept for compatibility)
+inpainting:
+  method: "ns"
+  radius: 1
+  mask_dilation: 0
+
+# Output Settings
+output:
+  format: "png"
+  quality: 95
+  include_metadata: true
+  generate_report: true
