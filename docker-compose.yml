@@ -2,8 +2,6 @@
 # Crystal International - Technical Assessment
 # Docker Compose Configuration
 
-version: '3.8'
-
 services:
   techpack-translator:
     build:
