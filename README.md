@@ -162,6 +162,13 @@ result = pipeline.process(
 )
 ```
 
+### Output & Results
+
+All produced output images and detection results are saved directly in the `/outputs` folder:
+- **Translated Image**: `outputs/[filename]_translated.png`
+- **Comparison Image**: `outputs/[filename]_translated_comparison.png`
+- **Detailed Report**: `outputs/[filename]_translated_report.json` (contains all OCR and translation data)
+
 ---
 
 ## Docker Deployment
