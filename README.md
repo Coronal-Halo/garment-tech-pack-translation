@@ -162,8 +162,7 @@ result = pipeline.process(
 
 ## Docker Deployment
 
-### Build and Run
-
+### Method 1: Using docker run (Basic)
 ```bash
 # Build the image
 docker build -t techpack-translator .
@@ -171,6 +170,25 @@ docker build -t techpack-translator .
 # Run translation (All-in-One, No internet required at runtime)
 docker run --rm -v $(pwd)/inputs:/app/inputs -v $(pwd)/outputs:/app/outputs \
     techpack-translator --input "inputs/techpack_img 1.png" --output "outputs/translated.png"
+```
+
+### Method 2: Using Docker Compose (Recommended)
+This is the recommended method for handling multi-image setups and persistent configuration.
+
+```bash
+# Build the images
+docker compose build
+
+# Run translation on a single image
+docker compose run techpack-translator --input "inputs/techpack_img 1.png"
+```
+
+### Method 3: Interactive Developer Mode
+If you need to explore the container or modify code on the fly:
+
+```bash
+# Run in dev mode (mounts the current directory for live code updates)
+docker compose --profile dev run techpack-dev
 ```
 
 ### Using Cloud Fallbacks
@@ -182,6 +200,7 @@ docker run --rm -e GOOGLE_TRANSLATE_API_KEY="your-key" \
     -v $(pwd)/inputs:/app/inputs -v $(pwd)/outputs:/app/outputs \
     techpack-translator --input "inputs/techpack_img 1.png"
 ```
+
 
 
 ---
