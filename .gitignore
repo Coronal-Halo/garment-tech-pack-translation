@@ -36,7 +36,9 @@ env/
 *.swo
 *~
 
-# Output files (regenerated)
+# Input/Output files (regenerated/samples)
+inputs/*
+!inputs/.gitkeep
 outputs/*
 !outputs/.gitkeep
 

@@ -121,17 +121,21 @@ This document outlines the system architecture for automatically translating tex
        │
        ▼
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                         STAGE 5: TRANSLATION                                  │
+│                         STAGE 5: HYBRID TRANSLATION                          │
 │  ┌────────────────────────────────────────────────────────────────────────┐  │
-│  │  ┌─────────────────┐  ┌─────────────────┐  ┌──────────────────────┐   │  │
-│  │  │ Batch Text      │→ │ Translation API │→ │ Post-Processing      │   │  │
-│  │  │ Preparation     │  │ (Google/DeepL)  │  │ & Validation         │   │  │
-│  │  └─────────────────┘  └─────────────────┘  └──────────────────────┘   │  │
-│  │                                                                         │  │
-│  │  Features:                                                              │  │
-│  │  • Garment industry glossary support                                   │  │
-│  │  • Context-aware translation                                            │  │
-│  │  • Fallback to multiple translation services                           │  │
+│  │                     Tiered Fallback Hierarchy                          │  │
+│  │                                                                        │  │
+│  │  ┌────────────────┐    ┌─────────────────┐    ┌──────────────────────┐ │  │
+│  │  │ 1. Glossary    │ ─► │ 2. Local MT     │ ─► │ 3. Cloud APIs        │ │  │
+│  │  │ (Exact Match)  │    │ (Neural MT)     │    │ (DeepL / Google)     │ │  │
+│  │  └────────────────┘    └────────┬────────┘    └──────────────────────┘ │  │
+│  │                                 │                                      │  │
+│  │  Features:                      ▼                                      │  │
+│  │  • Garment industry glossary support (Instant Path)                    │  │
+│  │  • MarianMT (Helsinki-NLP) Offline Model (Primary MT)                  │  │
+│  │  • Lazy Loading: Loads heavy MT model only when fallback is needed     │  │
+│  │  • GPU Acceleration & Sequential Batch Handling (OOM Prevention)       │  │
+│  │  • Anti-repetition generation filters                                  │  │
 │  └────────────────────────────────────────────────────────────────────────┘  │
 └──────────────────────────────────────────────────────────────────────────────┘
        │
@@ -196,11 +200,11 @@ This document outlines the system architecture for automatically translating tex
 │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────────────┐  │
 │  │ design_pack_    │  │ text_detector   │  │ translator.py           │  │
 │  │ detector.py     │  │ .py             │  │                         │  │
-│  │                 │  │                 │  │ • Google Translate API  │  │
-│  │ • Region        │  │ • PaddleOCR     │  │ • DeepL API             │  │
-│  │   detection     │  │ • EasyOCR       │  │ • Offline fallback      │  │
-│  │ • Texture       │  │ • Text          │  │ • Glossary support      │  │
-│  │   analysis      │  │   extraction    │  │                         │  │
+│  │                 │  │                 │  │ • Offline Glossary      │  │
+│  │ • Region        │  │ • PaddleOCR     │  │ • Local MarianMT Model  │  │
+│  │   detection     │  │ • EasyOCR       │  │ • Google Translate API  │  │
+│  │ • Texture       │  │ • Text          │  │ • DeepL API             │  │
+│  │   analysis      │  │   extraction    │  │ • Lazy load manager     │  │
 │  └─────────────────┘  └─────────────────┘  └─────────────────────────┘  │
 │           │                   │                       │                  │
 │           └───────────────────┴───────────────────────┘                  │
@@ -274,12 +278,12 @@ This document outlines the system architecture for automatically translating tex
 - Open-source with active development
 - Built-in text detection + recognition pipeline
 
-### 5.2 Translation Service: Google Translate API (with fallback)
+### 5.2 Translation Service: Hybrid Pipeline (Glossary + MarianMT)
 **Rationale:**
-- High-quality translations for technical content
-- Support for specialized terminology
-- Reliable with high uptime
-- Fallback to offline dictionary for critical terms
+- **Terminology Accuracy**: Offline glossary handles exact garment terms instantly.
+- **Privacy & Speed**: MarianMT provides high-quality local translation without data leaving the machine.
+- **Efficiency**: Lazy loading ensures the MT model only consumes memory if needed.
+- **Robustness**: Multi-cloud fallbacks (Google/DeepL) ensure success even if local models fail.
 
 ### 5.3 Text Inpainting: OpenCV + Pillow Hybrid
 **Rationale:**

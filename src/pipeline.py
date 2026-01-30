@@ -23,6 +23,27 @@ from .image_processor import ImageProcessor
 logger = logging.getLogger(__name__)
 
 
+def _ensure_writable(file_path: str) -> None:
+    """
+    Ensure a file path is writable.
+    
+    If the file exists but is not writable (e.g., created by Docker as root),
+    attempt to remove it first so we can create a new file.
+    """
+    if os.path.exists(file_path):
+        if not os.access(file_path, os.W_OK):
+            try:
+                os.remove(file_path)
+                logger.info(f"Removed non-writable file: {file_path}")
+            except PermissionError:
+                raise PermissionError(
+                    f"Cannot write to '{file_path}'. "
+                    f"The file exists but is owned by another user (likely root from Docker). "
+                    f"Please remove it manually with: sudo rm '{file_path}'"
+                )
+
+
+
 class TechPackTranslationPipeline:
     """
     Main orchestrator for the tech pack translation pipeline.
@@ -223,6 +244,7 @@ class TechPackTranslationPipeline:
         
         # Save output
         logger.info("Saving output...")
+        _ensure_writable(output_path)
         self.image_processor.save_image(processed_image, output_path)
         
         # Save intermediate results if requested
@@ -248,6 +270,7 @@ class TechPackTranslationPipeline:
             result.original_image, result.processed_image
         )
         comparison_path = os.path.join(output_dir, f"{base_name}_comparison.png")
+        _ensure_writable(comparison_path)
         self.image_processor.save_image(comparison, comparison_path)
         
         # Save detection visualization
@@ -257,11 +280,13 @@ class TechPackTranslationPipeline:
             result.design_pack_regions
         )
         detection_path = os.path.join(output_dir, f"{base_name}_detections.png")
+        _ensure_writable(detection_path)
         self.image_processor.save_image(detection_vis, detection_path)
         
         # Save processing report
         report = self._generate_report(result)
         report_path = os.path.join(output_dir, f"{base_name}_report.json")
+        _ensure_writable(report_path)
         with open(report_path, 'w', encoding='utf-8') as f:
             json.dump(report, f, ensure_ascii=False, indent=2)
         

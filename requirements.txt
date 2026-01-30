@@ -9,14 +9,20 @@ Pillow>=9.0.0
 scipy>=1.7.0
 
 # OCR engines (choose one or install all for flexibility)
-paddleocr>=2.6.0
-paddlepaddle>=2.4.0  # CPU version; use paddlepaddle-gpu for GPU support
+paddleocr==2.10.0
+paddlepaddle==2.6.2  # CPU version; use paddlepaddle-gpu for GPU support
 # easyocr>=1.6.0  # Alternative OCR engine (optional)
 # pytesseract>=0.3.10  # Alternative OCR engine (optional)
 
 # Translation
 googletrans==4.0.0-rc1  # Google Translate (free API)
-# deepl>=1.0.0  # DeepL API (optional, requires API key)
+deepl>=1.0.0  # DeepL API (fallback, requires API key)
+
+# Local Translation Model (MarianMT - offline, no API needed)
+transformers>=4.30.0
+sentencepiece>=0.1.99
+torch>=2.0.0
+
 
 # Configuration
 PyYAML>=6.0

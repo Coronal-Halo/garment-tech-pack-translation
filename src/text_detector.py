@@ -294,10 +294,13 @@ class TextDetector:
             for k, v in kwargs.items():
                 if k != 'paddleocr':
                     paddle_kwargs[k] = v
-                    
+            
+            # Handle both 'language' and 'lang' keys (config may use either)
+            lang = paddle_kwargs.pop('lang', paddle_kwargs.pop('language', 'en'))
+            
             return PaddleOCRBackend(
                 use_gpu=use_gpu,
-                lang=paddle_kwargs.pop('lang', 'en'),
+                lang=lang,
                 use_angle_cls=paddle_kwargs.pop('use_angle_cls', True),
                 show_log=paddle_kwargs.pop('show_log', False),
                 **paddle_kwargs

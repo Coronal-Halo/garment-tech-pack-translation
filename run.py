@@ -135,9 +135,21 @@ def main():
     
     # Process image
     try:
+        # Ensure output path includes original image name prefix
+        final_output_path = args.output
+        if final_output_path:
+            # If user specified output, ensure it follows naming convention
+            input_basename = os.path.splitext(os.path.basename(args.input))[0]
+            output_dir = os.path.dirname(final_output_path) or "outputs"
+            output_ext = os.path.splitext(final_output_path)[1] or ".png"
+            # Check if output already contains the input name
+            if not os.path.basename(final_output_path).startswith(input_basename):
+                final_output_path = os.path.join(output_dir, f"{input_basename}_translated{output_ext}")
+                logger.info(f"Output path adjusted to include original image name: {final_output_path}")
+        
         result = pipeline.process(
             image_path=args.input,
-            output_path=args.output,
+            output_path=final_output_path,
             save_intermediate=not args.no_intermediate
         )
         

@@ -49,13 +49,28 @@ class GoogleTranslateBackend(TranslationBackend):
         
         try:
             from googletrans import Translator
-            self.translator = Translator()
+            import httpx
+            import asyncio
+            
+            # Increase timeout for slow networks (default is 5s)
+            timeout = httpx.Timeout(5.0)
+            self.translator = Translator(timeout=timeout)
             self.use_free_api = True
+            
+            # Create a persistent event loop for async calls
+            try:
+                self._loop = asyncio.get_event_loop()
+            except RuntimeError:
+                self._loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(self._loop)
+            
             logger.info("Google Translate (free API) initialized")
         except ImportError:
             logger.warning("googletrans not installed, translation will use fallback")
             self.translator = None
             self.use_free_api = False
+            self._loop = None
+
     
     def translate(self, text: str, source_lang: str, target_lang: str) -> str:
         """Translate a single text using Google Translate."""
@@ -67,11 +82,19 @@ class GoogleTranslateBackend(TranslationBackend):
             target = "zh-cn" if target_lang.lower() == "zh-cn" else target_lang
             source = "en" if source_lang.lower() == "en" else source_lang
             
-            result = self.translator.translate(text, src=source, dest=target)
-            return result.text
+            # googletrans 4.0.2+ uses async API, run coroutine in persistent loop
+            coro = self.translator.translate(text, src=source, dest=target)
+            result = self._loop.run_until_complete(coro)
+            
+            translated_text = result.text
+            if translated_text and translated_text != text:
+                logger.info(f"Google Translate success: '{text[:20]}...' -> '{translated_text[:20]}...'")
+            return translated_text
         except Exception as e:
-            logger.error(f"Translation error: {e}")
+            logger.warning(f"Google Translate API timeout/error: {e}. Falling back to DeepL API...")
             return text
+
+
     
     def translate_batch(
         self, 
@@ -126,7 +149,7 @@ class DeepLBackend(TranslationBackend):
             )
             return result.text
         except Exception as e:
-            logger.error(f"DeepL translation error: {e}")
+            logger.warning(f"DeepL API error: {e}. Text will use fallback (offline glossary).")
             return text
     
     def translate_batch(
@@ -148,8 +171,140 @@ class DeepLBackend(TranslationBackend):
             )
             return [r.text for r in results]
         except Exception as e:
-            logger.error(f"DeepL batch translation error: {e}")
+            logger.warning(f"DeepL API batch error: {e}. Texts will remain untranslated.")
             return texts
+
+
+class MarianMTBackend(TranslationBackend):
+    """
+    Local translation using Helsinki-NLP's MarianMT model.
+    
+    This provides fast, offline translation without requiring API keys.
+    Model: Helsinki-NLP/opus-mt-en-zh (English to Chinese)
+    """
+    
+    def __init__(self, use_gpu: bool = True):
+        """
+        Initialize MarianMT backend.
+        
+        Args:
+            use_gpu: Whether to use GPU for inference (if available)
+        """
+        self.model = None
+        self.tokenizer = None
+        self.device = "cpu"
+        self.use_gpu = use_gpu
+        self.initialized = False
+
+    def _ensure_initialized(self):
+        """Lazy load the model and tokenizer only when needed."""
+        if self.initialized:
+            return
+            
+        try:
+            from transformers import MarianMTModel, MarianTokenizer
+            import torch
+            
+            model_name = "Helsinki-NLP/opus-mt-en-zh"
+            logger.info(f"Lazy loading local translation model: {model_name}")
+            
+            self.tokenizer = MarianTokenizer.from_pretrained(model_name)
+            self.model = MarianMTModel.from_pretrained(model_name)
+            
+            # Move to GPU if requested and available
+            if self.use_gpu and torch.cuda.is_available():
+                self.device = "cuda"
+                self.model = self.model.to(self.device)
+                logger.info("MarianMT loaded on GPU")
+            else:
+                logger.info("MarianMT loaded on CPU")
+                
+            self.initialized = True
+        except ImportError as e:
+            logger.warning(f"transformers/torch not installed: {e}. Local model unavailable.")
+        except Exception as e:
+            logger.warning(f"Failed to load MarianMT model: {e}")
+
+    
+    def _preprocess(self, text: str) -> str:
+        """Minimal preprocessing to remove OCR noise."""
+        if not text:
+            return ""
+        # COLLAPSE multiple spaces and strip
+        import re
+        return re.sub(r'\s+', ' ', text).strip()
+    
+    def translate(self, text: str, source_lang: str, target_lang: str) -> str:
+        """Translate a single text using MarianMT."""
+        # Lazy load model if not already done
+        self._ensure_initialized()
+        
+        if not self.model or not self.tokenizer:
+            return text
+
+        
+        try:
+            # Minimal preprocessing
+            processed_text = self._preprocess(text)
+            if not processed_text:
+                return text
+                
+            # Tokenize
+            inputs = self.tokenizer(processed_text, return_tensors="pt", padding=True, truncation=True, max_length=512)
+            inputs = {k: v.to(self.device) for k, v in inputs.items()}
+            
+            # Generate translation with anti-repetition parameters
+            with __import__('torch').no_grad():
+                outputs = self.model.generate(
+                    **inputs,
+                    max_length=512,
+                    num_beams=4,                    # Beam search for better quality
+                    repetition_penalty=1.5,         # Penalize repetition
+                    no_repeat_ngram_size=3,         # Prevent 3-gram repetition
+                    early_stopping=True             # Stop when beams converged
+                )
+            
+            # Decode
+            translated = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+            
+            # Anti-repetition validation: Reject if it's just repeating same characters
+            if translated and len(translated) > 4:
+                # Check if a small substring makes up most of the output
+                if len(set(translated)) / len(translated) < 0.2:
+                    logger.warning(f"MarianMT produced highly repetitive output, keeping original: '{text[:20]}...'")
+                    return text
+            
+            if translated and translated != text:
+                logger.info(f"MarianMT success: '{text[:20]}...' -> '{translated[:20]}...'")
+            
+            return translated
+        except Exception as e:
+            logger.warning(f"MarianMT translation error: {e}")
+            return text
+
+
+
+
+    
+    def translate_batch(
+        self, 
+        texts: List[str], 
+        source_lang: str, 
+        target_lang: str
+    ) -> List[str]:
+        """Translate a batch of texts using MarianMT (one at a time to avoid OOM)."""
+        if not self.model or not self.tokenizer:
+            return texts
+        
+        # Process one at a time to avoid GPU OOM issues
+        translations = []
+        for text in texts:
+            translated = self.translate(text, source_lang, target_lang)
+            translations.append(translated)
+        
+        logger.info(f"MarianMT batch translated {len(texts)} texts")
+        return translations
+
 
 
 class OfflineGlossaryBackend(TranslationBackend):
@@ -316,6 +471,7 @@ class OfflineGlossaryBackend(TranslationBackend):
         "and": "和",
         "or": "或",
         "for": "用于",
+
     }
     
     def __init__(self):
@@ -414,6 +570,15 @@ class Translator:
     ):
         """
         Initialize the translator.
+        
+        Translation hierarchy:
+        1. OCR Smart Correction (fix typos)
+        2. Check preservation patterns (skip translation for codes/numbers)
+        3. Glossary lookup (instant, offline - for exact matches)
+        4. Local MarianMT Model (fast, offline - main translation engine)
+        5. Google Translate API (fallback if local model unavailable)
+        6. DeepL API (last resort, requires DEEPL_API_KEY)
+        7. Glossary post-processing (always applied to fix terminology)
         """
         self.source_language = source_language
         self.target_language = target_language
@@ -428,10 +593,29 @@ class Translator:
         ]
         
         # Initialize backends
-        self.primary_backend = self._create_backend(service, api_key) if use_api else None
-        self.fallback_backend = OfflineGlossaryBackend()
+        # Local Model: MarianMT (primary translation engine - offline, fast)
+        use_gpu = True  # Use GPU if available for faster inference
+        self.local_model_backend = MarianMTBackend(use_gpu=use_gpu)
+
         
-        logger.info(f"Translator initialized (API: {use_api}, Glossary: {use_local_glossary}, Correction: {use_smart_correction})")
+        # API Fallbacks (used only if local model fails/unavailable)
+        self.primary_backend = GoogleTranslateBackend(api_key) if use_api else None
+        self.fallback_api_backend = DeepLBackend() if use_api else None
+        
+        # Glossary: Always used for industry-specific term lookup and post-processing
+        self.glossary_backend = OfflineGlossaryBackend()
+        
+        # Log initialization status
+        local_model_status = "ready (lazy load)"
+        deepl_status = "available" if (self.fallback_api_backend and self.fallback_api_backend.translator) else "unavailable (no API key)"
+        logger.info(f"Translator initialized:")
+        logger.info(f"  - Glossary lookup: always first")
+        logger.info(f"  - Local Model (MarianMT): {local_model_status}")
+        logger.info(f"  - Fallback API 1: Google Translate")
+        logger.info(f"  - Fallback API 2: DeepL ({deepl_status})")
+        logger.info(f"  - Glossary post-processing: always applied")
+        logger.info(f"  - Smart OCR Correction: {'enabled' if use_smart_correction else 'disabled'}")
+
     
     def _create_backend(self, service: str, api_key: str = None) -> TranslationBackend:
         """Create the appropriate translation backend."""
@@ -451,33 +635,79 @@ class Translator:
         return False
     
     def translate_text(self, text: str) -> str:
-        """Translate a single text string."""
+        """
+        Translate a single text string with fallback chain.
+        
+        Flow:
+        1. OCR Smart Correction
+        2. Check preservation patterns
+        3. Check glossary FIRST (instant local lookup for known terms)
+        4. Try Local MarianMT Model (fast, offline - main engine)
+        5. If local fails, try Google Translate API
+        6. If Google fails, try DeepL API (fallback)
+        7. Apply glossary post-processing (always)
+        """
         if not text or not text.strip():
             return text
         
-        # 1. OCR Smart Correction
+        original_text = text
+        
+        # Step 1: OCR Smart Correction
         if self.use_smart_correction:
-            text = self.fallback_backend.smart_correct(text)
+            text = self.glossary_backend.smart_correct(text)
 
-        # 2. Check if should preserve
+        # Step 2: Check if should preserve (codes, numbers, etc.)
         if self.should_preserve(text):
             return text
         
-        # 3. Industry Glossary Check (if enabled)
+        # Step 3: Check glossary FIRST (fast path - avoids model/API calls)
         if self.use_local_glossary:
-            # Check glossary first for industry terms
-            glossary_trans = self.fallback_backend.translate(text, self.source_language, self.target_language)
-            if glossary_trans != text:
-                return glossary_trans
+            glossary_result = self.glossary_backend.translate(text, self.source_language, self.target_language)
+            if glossary_result != text:
+                # Glossary found a match - no need for model/API
+                return glossary_result
         
-        # 4. API Translation (if enabled and no glossary match found)
-        if self.use_api and self.primary_backend:
+        translated = None
+        
+        # Step 4: Try Local MarianMT Model (primary - fast, offline)
+        if self.local_model_backend and self.local_model_backend.model:
             try:
-                return self.primary_backend.translate(text, self.source_language, self.target_language)
+                translated = self.local_model_backend.translate(text, self.source_language, self.target_language)
+                if translated and translated != text:
+                    pass  # Success - no need for API
             except Exception as e:
-                logger.error(f"API error: {e}")
+                logger.warning(f"Local MarianMT failed: {e}. Falling back to APIs...")
         
-        return text
+        # Step 5: If local failed, try Google Translate API
+        if (not translated or translated == text) and self.use_api and self.primary_backend:
+            try:
+                translated = self.primary_backend.translate(text, self.source_language, self.target_language)
+                if translated and translated != text:
+                    logger.info(f"Used Google Translate fallback for: '{text[:30]}...'")
+            except Exception as e:
+                logger.warning(f"Google Translate API failed: {e}. Falling back to DeepL API...")
+        
+        # Step 6: If Google failed, try DeepL API (last resort)
+        if (not translated or translated == text) and self.fallback_api_backend and self.fallback_api_backend.translator:
+            try:
+                translated = self.fallback_api_backend.translate(text, self.source_language, self.target_language)
+                if translated and translated != text:
+                    logger.info(f"Used DeepL fallback for: '{text[:30]}...'")
+            except Exception as e:
+                logger.warning(f"DeepL API also failed: {e}. Keeping original text.")
+        
+        # If still no translation, use original
+        if not translated or translated == text:
+            translated = text
+        
+        # Step 7: Apply glossary post-processing (fixes industry terminology)
+        if self.use_local_glossary:
+            glossary_result = self.glossary_backend.translate(translated, self.source_language, self.target_language)
+            if glossary_result != translated:
+                translated = glossary_result
+        
+        return translated
+
     
     def translate_regions(
         self, 
@@ -486,77 +716,151 @@ class Translator:
     ) -> List[TextRegion]:
         """
         Translate all translatable text regions.
-        Uses a two-pass approach:
-        1. Local Glossary/Smart Correction
-        2. Batch API for the remaining untranslated text
-        """
-        logger.info(f"Translating {len(text_regions)} text regions using two-pass approach...")
         
-        # Pass 1: Local Glossary and Smart Correction
-        untranslated_indices = []
+        Translation flow:
+        1. OCR Smart Correction
+        2. Check preservation patterns
+        3. Glossary lookup (fast, exact match)
+        4. Local MarianMT Model (primary - fast, offline)
+        5. Google Translate API fallback
+        6. DeepL API fallback (last resort)
+        7. Glossary post-processing (always applied)
+        """
+        logger.info(f"Translating {len(text_regions)} text regions...")
+        
+        # Prepare regions for translation
+        regions_to_translate = []
         for i, region in enumerate(text_regions):
             if region.text_type != TextType.TRANSLATABLE:
                 region.translated_text = region.text
                 continue
             
-            # 1. OCR Smart Correction
+            # Step 1: OCR Smart Correction
             text = region.text
             if self.use_smart_correction:
-                text = self.fallback_backend.smart_correct(text)
+                text = self.glossary_backend.smart_correct(text)
             
-            # 2. Check preservation
+            # Step 2: Check preservation
             if self.should_preserve(text):
                 region.translated_text = text
                 continue
-                
-            # 3. Glossary Check
+            
+            # Step 3: Try glossary FIRST (fast path - instant local lookup)
             if self.use_local_glossary:
-                glossary_trans = self.fallback_backend.translate(text, self.source_language, self.target_language)
-                if glossary_trans != text:
-                    region.translated_text = glossary_trans
+                glossary_result = self.glossary_backend.translate(text, self.source_language, self.target_language)
+                if glossary_result != text:
+                    # Glossary found a match - no need for model/API
+                    region.translated_text = glossary_result
                     continue
             
-            # If we reach here, we need the API
-            untranslated_indices.append(i)
+            # Mark for model/API translation (glossary didn't match)
+            regions_to_translate.append((i, text))
         
-        # Pass 2: Batch API for remaining
-        if untranslated_indices and self.use_api and self.primary_backend:
-            logger.info(f"Pass 2: Batch translating {len(untranslated_indices)} regions via API...")
+        logger.info(f"  {len(regions_to_translate)} regions need model/API translation (others handled by glossary)")
+        
+        # Step 4: Try Local MarianMT Model (primary - fast, offline)
+        local_failed_indices = []
+        if regions_to_translate and self.local_model_backend and self.local_model_backend.model:
+            logger.info(f"  Using local MarianMT model for {len(regions_to_translate)} regions...")
             
-            # Extract texts for API
-            texts_to_api = [text_regions[idx].text for idx in untranslated_indices]
+            batch_texts = [t for _, t in regions_to_translate]
+            batch_indices = [i for i, _ in regions_to_translate]
             
-            # Batch process
-            for i in range(0, len(texts_to_api), batch_size):
-                chunk_texts = texts_to_api[i:i + batch_size]
-                chunk_indices = untranslated_indices[i:i + batch_size]
+            try:
+                translations = self.local_model_backend.translate_batch(
+                    batch_texts,
+                    self.source_language,
+                    self.target_language
+                )
+                
+                for idx, translation in zip(batch_indices, translations):
+                    if translation and translation != text_regions[idx].text:
+                        text_regions[idx].translated_text = translation
+                    else:
+                        local_failed_indices.append(idx)
+                        
+            except Exception as e:
+                logger.warning(f"  Local model batch failed: {e}. Will use API fallback...")
+                local_failed_indices = batch_indices
+        else:
+            # No local model available, all regions need API fallback
+            local_failed_indices = [i for i, _ in regions_to_translate]
+        
+        # Step 5: Google Translate API fallback for failed local translations
+        google_failed_indices = []
+        if local_failed_indices and self.use_api and self.primary_backend:
+            logger.info(f"  Using Google Translate fallback for {len(local_failed_indices)} regions...")
+            
+            for batch_start in range(0, len(local_failed_indices), batch_size):
+                batch_indices = local_failed_indices[batch_start:batch_start + batch_size]
+                batch_texts = [text_regions[i].text for i in batch_indices]
                 
                 try:
                     translations = self.primary_backend.translate_batch(
-                        chunk_texts,
+                        batch_texts,
                         self.source_language,
                         self.target_language
                     )
                     
-                    for idx, translation in zip(chunk_indices, translations):
-                        text_regions[idx].translated_text = translation
-                        
+                    for idx, translation in zip(batch_indices, translations):
+                        if translation and translation != text_regions[idx].text:
+                            text_regions[idx].translated_text = translation
+                        else:
+                            google_failed_indices.append(idx)
+                            
                 except Exception as e:
-                    logger.error(f"Batch API error for chunk {i}: {e}")
-                    # Fallback to individual translation for this chunk
-                    for idx in chunk_indices:
-                        try:
-                            text_regions[idx].translated_text = self.primary_backend.translate(
-                                text_regions[idx].text,
-                                self.source_language,
-                                self.target_language
-                            )
-                        except Exception:
-                            text_regions[idx].translated_text = text_regions[idx].text
+                    logger.warning(f"  Google Translate batch failed: {e}. Will use DeepL fallback...")
+                    google_failed_indices.extend(batch_indices)
+        else:
+            google_failed_indices = local_failed_indices
         
-        # Final cleanup for anything still missing
+        # Step 6: DeepL API fallback for failed Google translations
+        if google_failed_indices and self.fallback_api_backend and self.fallback_api_backend.translator:
+            logger.info(f"  Using DeepL fallback for {len(google_failed_indices)} regions...")
+            
+            for idx in google_failed_indices:
+                try:
+                    original_text = text_regions[idx].text
+                    translated = self.fallback_api_backend.translate(
+                        original_text,
+                        self.source_language,
+                        self.target_language
+                    )
+                    if translated and translated != original_text:
+                        text_regions[idx].translated_text = translated
+                    else:
+                        text_regions[idx].translated_text = original_text
+                except Exception as e:
+                    logger.warning(f"  DeepL failed for region {idx}: {e}. Keeping original text.")
+                    text_regions[idx].translated_text = text_regions[idx].text
+        elif google_failed_indices:
+            logger.warning(f"  {len(google_failed_indices)} regions will keep original text (all translation methods failed there)")
+
+
+            for idx in google_failed_indices:
+                if text_regions[idx].translated_text is None:
+                    text_regions[idx].translated_text = text_regions[idx].text
+        
+        # Step 7: Apply glossary post-processing (ALWAYS)
+        if self.use_local_glossary:
+            glossary_applied = 0
+            for region in text_regions:
+                if region.translated_text:
+                    glossary_result = self.glossary_backend.translate(
+                        region.translated_text, 
+                        self.source_language, 
+                        self.target_language
+                    )
+                    if glossary_result != region.translated_text:
+                        region.translated_text = glossary_result
+                        glossary_applied += 1
+            if glossary_applied > 0:
+                logger.info(f"  Glossary post-processing applied to {glossary_applied} regions")
+        
+        # Final cleanup
         for region in text_regions:
             if region.translated_text is None:
                 region.translated_text = region.text
         
         return text_regions
+

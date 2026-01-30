@@ -40,13 +40,14 @@ Tech pack design images are essential in the garment industry for communication 
 
 ## Key Features
 
+- **Intelligent Hybrid Translation**: Layered pipeline using Built-in Glossary → Local MarianMT Model → Google/DeepL APIs
+- **High-Performance Local Model**: Integrated Helsinki-NLP/opus-mt-en-zh for fast, secure, and offline translation
+- **True Offline Capability**: Docker image pre-bundles the translation model for immediate "all-in-one" execution
 - **Multi-backend OCR Support**: PaddleOCR (default), EasyOCR, Tesseract
 - **Intelligent Design Pack Detection**: Automatically identifies graphics that should not be translated
-- **Industry-Specific Translation**: Built-in garment terminology glossary
 - **Smart Text Classification**: Distinguishes between translatable text and codes/measurements to preserve
 - **High-Quality Text Rendering**: Proper Chinese font support with optimal sizing
-- **Docker Ready**: Easy deployment with Docker and Docker Compose
-- **Configurable Pipeline**: YAML-based configuration for all components
+- **Docker Ready**: Proactive permission handling and easy deployment
 
 ---
 
@@ -67,9 +68,16 @@ Tech pack design images are essential in the garment industry for communication 
                                                           │
                                                           ▼
   ┌────────────────┐     ┌────────────────┐     ┌────────────────────┐
-  │ Output Image   │ ◄── │ Text Rendering │ ◄── │ Translation        │
+  │ Output Image   │ ◄── │ Text Rendering │ ◄── │ Hybrid Translation │
   │ (Translated)   │     │ (Chinese)      │     │ (EN → ZH)          │
-  └────────────────┘     └────────────────┘     └────────────────────┘
+  └────────────────┘     └────────────────┘     └─────────┬──────────┘
+                                                          │
+                                     ┌────────────────────┴────────────────────┐
+                                     ▼                    ▼                    ▼
+                           ┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐
+                           │ 1. Glossary      │ │ 2. Local Model   │ │ 3. Cloud APIs     │
+                           │ (Exact Matches)  │ │ (Sentence MT)    │ │ (DeepL/Google)   │
+                           └──────────────────┘ └──────────────────┘ └──────────────────┘
 ```
 
 For detailed algorithm design, see [docs/ALGORITHM_DESIGN.md](docs/ALGORITHM_DESIGN.md).
@@ -82,6 +90,7 @@ For detailed algorithm design, see [docs/ALGORITHM_DESIGN.md](docs/ALGORITHM_DES
 
 - Python 3.9+
 - pip or conda
+- GPU support requires NVIDIA CUDA (optional but recommended for speed)
 
 ### Option 1: pip Installation
 
@@ -93,7 +102,7 @@ cd Crystal_International_Hong_Kong
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install dependencies
+# Install dependencies (includes transformers, torch, etc.)
 pip install -r requirements.txt
 ```
 
@@ -108,14 +117,13 @@ conda activate techpack
 pip install -r requirements.txt
 ```
 
-### Option 3: Docker (Recommended for Deployment)
+### Option 3: Docker (Recommended - True "All-in-One")
 
 ```bash
-# Build the Docker image
+# Build the Docker image (pre-downloads the local MT model)
 docker build -t techpack-translator .
 
-# Or use Docker Compose
-docker compose build
+# The image is ready for true offline use out of the box.
 ```
 
 ---
@@ -125,19 +133,13 @@ docker compose build
 ### Command Line Interface
 
 ```bash
-# Basic usage
+# Basic usage (Uses Glossary and Local Model by default)
 python run.py --input "techpack_img 1.png"
 
 # Specify output path
 python run.py --input "techpack_img 1.png" --output "outputs/translated.png"
 
-# Use custom configuration
-python run.py --input "techpack_img 1.png" --config "config/config.yaml"
-
-# Enable verbose logging
-python run.py --input "techpack_img 1.png" --verbose
-
-# Enable GPU acceleration (if available)
+# Use GPU acceleration for local translation (MarianMT)
 python run.py --input "techpack_img 1.png" --gpu
 ```
 
@@ -154,16 +156,6 @@ result = pipeline.process(
     image_path="techpack_img 1.png",
     output_path="outputs/translated.png"
 )
-
-# Access results
-print(f"Detected {len(result.text_regions)} text regions")
-print(f"Processing time: {result.processing_time_seconds:.2f}s")
-
-# Process batch
-results = pipeline.process_batch(
-    image_paths=["image1.png", "image2.png"],
-    output_dir="outputs/"
-)
 ```
 
 ---
@@ -176,36 +168,21 @@ results = pipeline.process_batch(
 # Build the image
 docker build -t techpack-translator .
 
-# Run translation on a single image
-docker run -v $(pwd):/app/inputs -v $(pwd)/outputs:/app/outputs \
+# Run translation (All-in-One, No internet required at runtime)
+docker run --rm -v $(pwd)/inputs:/app/inputs -v $(pwd)/outputs:/app/outputs \
+    techpack-translator --input "inputs/techpack_img 1.png" --output "outputs/translated.png"
+```
+
+### Using Cloud Fallbacks
+If you wish to use external APIs as additional fallbacks:
+
+```bash
+# Pass API keys via environment variables
+docker run --rm -e GOOGLE_TRANSLATE_API_KEY="your-key" \
+    -v $(pwd)/inputs:/app/inputs -v $(pwd)/outputs:/app/outputs \
     techpack-translator --input "inputs/techpack_img 1.png"
 ```
 
-### Using Docker Compose
-
-```bash
-# Build
-docker compose build
-
-# Run with docker compose
-docker compose run techpack-translator --input "inputs/techpack_img 1.png"
-
-# Interactive development mode
-docker compose --profile dev run techpack-dev
-```
-
-### With Translation API Keys
-
-```bash
-# Set environment variables for API keys
-export GOOGLE_TRANSLATE_API_KEY="your-key-here"
-export DEEPL_API_KEY="your-key-here"
-
-# Run with API keys
-docker run -e GOOGLE_TRANSLATE_API_KEY -e DEEPL_API_KEY \
-    -v $(pwd):/app/inputs -v $(pwd)/outputs:/app/outputs \
-    techpack-translator --input "inputs/techpack_img 1.png"
-```
 
 ---
 

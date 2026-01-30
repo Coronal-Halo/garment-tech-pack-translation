@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxext6 \
     libxrender-dev \
     libgomp1 \
-    libgl1-mesa-glx \
+    libgl1 \
     # Font support
     fonts-noto-cjk \
     fonts-noto-cjk-extra \
@@ -42,20 +42,29 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
+# Create directories and download models
+RUN mkdir -p /root/.cache/huggingface && \
+    python3 -c "from transformers import MarianMTModel, MarianTokenizer; \
+                model_name = 'Helsinki-NLP/opus-mt-en-zh'; \
+                MarianTokenizer.from_pretrained(model_name); \
+                MarianMTModel.from_pretrained(model_name)"
+
 # Copy application code
 COPY src/ ./src/
 COPY config/ ./config/
 COPY run.py .
 
-# Create directories
-RUN mkdir -p inputs outputs assets/fonts
+# Create directories and set permissions
+RUN mkdir -p inputs outputs assets/fonts && \
+    chmod -R 777 outputs
 
-# Copy font files if available
-COPY assets/fonts/* ./assets/fonts/ 2>/dev/null || true
+# Copy font files if available (use . to copy directory contents)
+COPY assets/fonts/. ./assets/fonts/
 
 # Set default command
 ENTRYPOINT ["python", "run.py"]
 CMD ["--help"]
+
 
 # Labels
 LABEL maintainer="Yuxiang Huang"
