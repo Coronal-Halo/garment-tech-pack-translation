@@ -45,9 +45,9 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Create directories and download models
 RUN mkdir -p /root/.cache/huggingface && \
     python3 -c "from transformers import MarianMTModel, MarianTokenizer; \
-                model_name = 'Helsinki-NLP/opus-mt-en-zh'; \
-                MarianTokenizer.from_pretrained(model_name); \
-                MarianMTModel.from_pretrained(model_name)"
+    model_name = 'Helsinki-NLP/opus-mt-en-zh'; \
+    MarianTokenizer.from_pretrained(model_name); \
+    MarianMTModel.from_pretrained(model_name)"
 
 # Copy application code
 COPY src/ ./src/

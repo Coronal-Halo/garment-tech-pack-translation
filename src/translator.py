@@ -82,13 +82,19 @@ class GoogleTranslateBackend(TranslationBackend):
             target = "zh-cn" if target_lang.lower() == "zh-cn" else target_lang
             source = "en" if source_lang.lower() == "en" else source_lang
             
-            # googletrans 4.0.2+ uses async API, run coroutine in persistent loop
+            # googletrans 4.0.0-rc1+ usually returns a coroutine, but check for safety
             coro = self.translator.translate(text, src=source, dest=target)
-            result = self._loop.run_until_complete(coro)
+            
+            # Use inspect or just check if it's awaitable
+            import inspect
+            if inspect.isawaitable(coro):
+                result = self._loop.run_until_complete(coro)
+            else:
+                result = coro
             
             translated_text = result.text
             if translated_text and translated_text != text:
-                logger.info(f"Google Translate success: '{text[:20]}...' -> '{translated_text[:20]}...'")
+                logger.debug(f"Google Translate success: '{text[:20]}...' -> '{translated_text[:20]}...'")
             return translated_text
         except Exception as e:
             logger.warning(f"Google Translate API timeout/error: {e}. Falling back to DeepL API...")
@@ -458,6 +464,62 @@ class OfflineGlossaryBackend(TranslationBackend):
         "double needle topstitch": "双针明线",
         "zig zag topstitch": "锯齿明线",
         "use heavy": "使用粗线",
+        
+        # Standalone technical terms for fragmented OCR
+        "needle": "针",
+        "thread": "线",
+        "stitching": "缝合",
+        "stitch": "缝",
+        "seam": "缝",
+        "seams": "缝线",
+        "double": "双",
+        "triple": "三",
+        "quilted": "绗缝",
+        "binding": "包边",
+        "elastic": "松紧带",
+        "elasticated": "带松紧的",
+        "drawstring": "抽绳",
+        "stopper": "止滑扣",
+        "eyelet": "气眼",
+        "grommet": "金属孔",
+        "velcro": "魔术贴",
+        "piping": "嵌条",
+        "rib": "螺纹",
+        "ribbing": "螺纹",
+        "interlining": "衬布",
+        "padding": "填充物",
+        "down": "羽绒",
+        "woven": "梭织",
+        "knit": "针织",
+        "jersey": "汗布",
+        "fleece": "粘绒",
+        "denim": "牛仔",
+        "twill": "斜纹",
+        "satin": "缎面",
+        "canvas": "帆布",
+        "mesh": "网目",
+        "lace": "花边",
+        "sequin": "亮片",
+        "bead": "珠子",
+        "embroidery": "刺绣",
+        "applique": "贴补花",
+        "patch": "补丁",
+        "print": "印花",
+        "washed": "水洗",
+        "dyed": "染色",
+        "garment dyed": "成衣染色",
+        "specification": "规格",
+        "measurements": "尺寸",
+        "measurement": "测量",
+        "tolerance": "公差",
+        "shrinkage": "缩水",
+        "weight": "重量",
+        "width": "宽度",
+        "length": "长度",
+        "height": "高度",
+        "depth": "深度",
+        "diameter": "直径",
+        "circumference": "周长",
         
         # Design pack
         "design pack image": "设计图",
