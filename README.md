@@ -123,8 +123,12 @@ pip install -r requirements.txt
 # Build the Docker image (pre-downloads the local MT model)
 docker build -t techpack-translator .
 
+# Or use Docker Compose
+docker compose build
+
 # The image is ready for true offline use out of the box.
 ```
+
 
 ---
 
