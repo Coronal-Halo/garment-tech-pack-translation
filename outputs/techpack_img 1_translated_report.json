@@ -1,0 +1,1782 @@
+{
+  "summary": {
+    "total_text_regions": 134,
+    "translated_regions": 134,
+    "preserved_regions": 22,
+    "design_pack_regions": 2,
+    "processing_time_seconds": 13.27,
+    "image_dimensions": {
+      "width": 1197,
+      "height": 681
+    }
+  },
+  "text_regions": [
+    {
+      "id": 0,
+      "original_text": "Design pack image",
+      "translated_text": "设计图",
+      "text_type": "translatable",
+      "confidence": 0.999,
+      "bbox": [
+        908,
+        381,
+        1097,
+        403
+      ]
+    },
+    {
+      "id": 1,
+      "original_text": "Fabric:97% Cotton3% Spandex Poplin5.5 oz,60",
+      "translated_text": "面料:97% 棉3% 氨纶 府绸5.5 oz,60",
+      "text_type": "translatable",
+      "confidence": 0.916,
+      "bbox": [
+        16,
+        131,
+        255,
+        144
+      ]
+    },
+    {
+      "id": 2,
+      "original_text": "Mocha Mousse Ultimate Gray As Per Requirement",
+      "translated_text": "摩卡慕斯 极致灰 按需求",
+      "text_type": "translatable",
+      "confidence": 0.955,
+      "bbox": [
+        388,
+        131,
+        623,
+        144
+      ]
+    },
+    {
+      "id": 3,
+      "original_text": "Swift Tack:1,100% Recycled Polypropylene",
+      "translated_text": "速钉:1,100% 再生 聚丙烯",
+      "text_type": "translatable",
+      "confidence": 0.957,
+      "bbox": [
+        16,
+        289,
+        226,
+        302
+      ]
+    },
+    {
+      "id": 4,
+      "original_text": "Zipper:#5 Close End with Auto-Lock Slider",
+      "translated_text": "拉链:#5 闭口 带有 自动锁滑块",
+      "text_type": "translatable",
+      "confidence": 0.943,
+      "bbox": [
+        16,
+        194,
+        214,
+        207
+      ]
+    },
+    {
+      "id": 5,
+      "original_text": "Main Labet:Hemp Screen Printed Logo",
+      "translated_text": "Main Labet:麻 丝网印刷 Logo",
+      "text_type": "translatable",
+      "confidence": 0.946,
+      "bbox": [
+        16,
+        225,
+        199,
+        238
+      ]
+    },
+    {
+      "id": 6,
+      "original_text": "Size Label:Hemp Screen Printed Logo",
+      "translated_text": "尺码标:麻 丝网印刷 Logo",
+      "text_type": "translatable",
+      "confidence": 0.942,
+      "bbox": [
+        16,
+        241,
+        195,
+        254
+      ]
+    },
+    {
+      "id": 7,
+      "original_text": "Care and Content Label:100% Hemp",
+      "translated_text": "Care 和 成分标:100% 麻",
+      "text_type": "translatable",
+      "confidence": 0.955,
+      "bbox": [
+        16,
+        210,
+        194,
+        223
+      ]
+    },
+    {
+      "id": 8,
+      "original_text": "Packaging Desiccant:Micro-Pak Clay",
+      "translated_text": "包装 干燥剂:防霉片(粘土)",
+      "text_type": "translatable",
+      "confidence": 0.953,
+      "bbox": [
+        17,
+        336,
+        193,
+        349
+      ]
+    },
+    {
+      "id": 9,
+      "original_text": "Interfacing:Fusable Light Weight",
+      "translated_text": "衬布:粘合衬 轻薄",
+      "text_type": "translatable",
+      "confidence": 0.961,
+      "bbox": [
+        16,
+        178,
+        173,
+        192
+      ]
+    },
+    {
+      "id": 10,
+      "original_text": "Style Name:",
+      "translated_text": "款式名称",
+      "text_type": "translatable",
+      "confidence": 0.945,
+      "bbox": [
+        15,
+        10,
+        112,
+        32
+      ]
+    },
+    {
+      "id": 11,
+      "original_text": "THREAD FOR ALL",
+      "translated_text": "线 用于 全部",
+      "text_type": "translatable",
+      "confidence": 0.96,
+      "bbox": [
+        290,
+        415,
+        383,
+        437
+      ]
+    },
+    {
+      "id": 12,
+      "original_text": "Tissue Paper:100%Recycled Paper",
+      "translated_text": "薄纸:100%再生纸",
+      "text_type": "translatable",
+      "confidence": 0.952,
+      "bbox": [
+        16,
+        321,
+        185,
+        333
+      ]
+    },
+    {
+      "id": 13,
+      "original_text": "Garment BagEco Garment Bags",
+      "translated_text": "服装袋环保 服装袋s",
+      "text_type": "translatable",
+      "confidence": 0.961,
+      "bbox": [
+        16,
+        305,
+        171,
+        318
+      ]
+    },
+    {
+      "id": 14,
+      "original_text": "Hang Tag:100%Recycled Paper",
+      "translated_text": "吊牌:100%再生纸",
+      "text_type": "translatable",
+      "confidence": 0.95,
+      "bbox": [
+        16,
+        257,
+        170,
+        270
+      ]
+    },
+    {
+      "id": 15,
+      "original_text": "Price Tag:100% Recycled Paper",
+      "translated_text": "价格标签:100% 再生纸",
+      "text_type": "translatable",
+      "confidence": 0.951,
+      "bbox": [
+        16,
+        273,
+        168,
+        286
+      ]
+    },
+    {
+      "id": 16,
+      "original_text": "Piping Cord:1/8,100% Hemp",
+      "translated_text": "滚边绳:1/8,100% 麻",
+      "text_type": "translatable",
+      "confidence": 0.934,
+      "bbox": [
+        16,
+        162,
+        161,
+        175
+      ]
+    },
+    {
+      "id": 17,
+      "original_text": "Additional Notes & Comments:",
+      "translated_text": "附加说明 & 备注:",
+      "text_type": "translatable",
+      "confidence": 0.971,
+      "bbox": [
+        17,
+        353,
+        161,
+        366
+      ]
+    },
+    {
+      "id": 18,
+      "original_text": "Size Range/Sample:",
+      "translated_text": "尺码范围/样品:",
+      "text_type": "translatable",
+      "confidence": 0.975,
+      "bbox": [
+        123,
+        73,
+        220,
+        90
+      ]
+    },
+    {
+      "id": 19,
+      "original_text": "Thread:100% Polyester",
+      "translated_text": "线:100% 聚酯纤维",
+      "text_type": "translatable",
+      "confidence": 0.961,
+      "bbox": [
+        16,
+        147,
+        129,
+        160
+      ]
+    },
+    {
+      "id": 20,
+      "original_text": "Fit Block Reference:",
+      "translated_text": "版型参考",
+      "text_type": "translatable",
+      "confidence": 0.946,
+      "bbox": [
+        470,
+        35,
+        565,
+        49
+      ]
+    },
+    {
+      "id": 21,
+      "original_text": "As Per Requirement",
+      "translated_text": "按需求",
+      "text_type": "translatable",
+      "confidence": 0.977,
+      "bbox": [
+        529,
+        178,
+        623,
+        192
+      ]
+    },
+    {
+      "id": 22,
+      "original_text": "Unit of Measure",
+      "translated_text": "计量单位",
+      "text_type": "translatable",
+      "confidence": 0.955,
+      "bbox": [
+        693,
+        113,
+        774,
+        129
+      ]
+    },
+    {
+      "id": 23,
+      "original_text": "Color Details",
+      "translated_text": "颜色详情",
+      "text_type": "translatable",
+      "confidence": 0.958,
+      "bbox": [
+        392,
+        111,
+        459,
+        130
+      ]
+    },
+    {
+      "id": 24,
+      "original_text": "As Per Requirement",
+      "translated_text": "按需求",
+      "text_type": "translatable",
+      "confidence": 0.953,
+      "bbox": [
+        686,
+        146,
+        782,
+        159
+      ]
+    },
+    {
+      "id": 25,
+      "original_text": "As Per Requirement",
+      "translated_text": "按需求",
+      "text_type": "translatable",
+      "confidence": 0.974,
+      "bbox": [
+        528,
+        161,
+        622,
+        174
+      ]
+    },
+    {
+      "id": 26,
+      "original_text": "As Per Requirement",
+      "translated_text": "按需求",
+      "text_type": "translatable",
+      "confidence": 0.973,
+      "bbox": [
+        530,
+        147,
+        623,
+        160
+      ]
+    },
+    {
+      "id": 27,
+      "original_text": "Style Number:",
+      "translated_text": "款号",
+      "text_type": "translatable",
+      "confidence": 0.972,
+      "bbox": [
+        255,
+        34,
+        326,
+        51
+      ]
+    },
+    {
+      "id": 28,
+      "original_text": "As Per Requirement",
+      "translated_text": "按需求",
+      "text_type": "translatable",
+      "confidence": 0.954,
+      "bbox": [
+        529,
+        319,
+        621,
+        332
+      ]
+    },
+    {
+      "id": 29,
+      "original_text": "Designer's Name:",
+      "translated_text": "设计师姓名",
+      "text_type": "translatable",
+      "confidence": 0.974,
+      "bbox": [
+        125,
+        36,
+        210,
+        50
+      ]
+    },
+    {
+      "id": 30,
+      "original_text": "Placement",
+      "translated_text": "位置",
+      "text_type": "translatable",
+      "confidence": 0.994,
+      "bbox": [
+        259,
+        112,
+        321,
+        131
+      ]
+    },
+    {
+      "id": 31,
+      "original_text": "Brand Name/Logo:",
+      "translated_text": "品牌名称/Logo:",
+      "text_type": "translatable",
+      "confidence": 0.974,
+      "bbox": [
+        30,
+        35,
+        112,
+        49
+      ]
+    },
+    {
+      "id": 32,
+      "original_text": "Season/Release:",
+      "translated_text": "季节/发布:",
+      "text_type": "translatable",
+      "confidence": 0.997,
+      "bbox": [
+        368,
+        35,
+        450,
+        49
+      ]
+    },
+    {
+      "id": 33,
+      "original_text": "Product Category:",
+      "translated_text": "产品类别",
+      "text_type": "translatable",
+      "confidence": 0.965,
+      "bbox": [
+        574,
+        76,
+        660,
+        89
+      ]
+    },
+    {
+      "id": 34,
+      "original_text": "Style Description:",
+      "translated_text": "款式描述",
+      "text_type": "translatable",
+      "confidence": 0.936,
+      "bbox": [
+        684,
+        76,
+        769,
+        89
+      ]
+    },
+    {
+      "id": 35,
+      "original_text": "TOPSTITCH",
+      "translated_text": "明线",
+      "text_type": "translatable",
+      "confidence": 0.997,
+      "bbox": [
+        512,
+        549,
+        580,
+        565
+      ]
+    },
+    {
+      "id": 36,
+      "original_text": "Factory Details:",
+      "translated_text": "工厂详情",
+      "text_type": "translatable",
+      "confidence": 0.965,
+      "bbox": [
+        574,
+        36,
+        650,
+        50
+      ]
+    },
+    {
+      "id": 37,
+      "original_text": "Packaging",
+      "translated_text": "包装",
+      "text_type": "translatable",
+      "confidence": 0.946,
+      "bbox": [
+        261,
+        318,
+        317,
+        337
+      ]
+    },
+    {
+      "id": 38,
+      "original_text": "USE HEAVY",
+      "translated_text": "使用粗线",
+      "text_type": "translatable",
+      "confidence": 0.95,
+      "bbox": [
+        291,
+        402,
+        352,
+        419
+      ]
+    },
+    {
+      "id": 39,
+      "original_text": "Target Volume:",
+      "translated_text": "目标产量",
+      "text_type": "translatable",
+      "confidence": 0.968,
+      "bbox": [
+        683,
+        35,
+        756,
+        49
+      ]
+    },
+    {
+      "id": 40,
+      "original_text": "Back Neck",
+      "translated_text": "后领",
+      "text_type": "translatable",
+      "confidence": 0.958,
+      "bbox": [
+        260,
+        285,
+        316,
+        303
+      ]
+    },
+    {
+      "id": 41,
+      "original_text": "TOPSTITCHING",
+      "translated_text": "明线",
+      "text_type": "translatable",
+      "confidence": 0.996,
+      "bbox": [
+        293,
+        437,
+        370,
+        450
+      ]
+    },
+    {
+      "id": 42,
+      "original_text": "Packaging",
+      "translated_text": "包装",
+      "text_type": "translatable",
+      "confidence": 0.991,
+      "bbox": [
+        261,
+        302,
+        316,
+        320
+      ]
+    },
+    {
+      "id": 43,
+      "original_text": "Contact Information:",
+      "translated_text": "联系信息",
+      "text_type": "translatable",
+      "confidence": 0.98,
+      "bbox": [
+        257,
+        77,
+        355,
+        87
+      ]
+    },
+    {
+      "id": 44,
+      "original_text": "NEEDLE",
+      "translated_text": "NEEDLE",
+      "text_type": "translatable",
+      "confidence": 0.997,
+      "bbox": [
+        524,
+        426,
+        575,
+        445
+      ]
+    },
+    {
+      "id": 45,
+      "original_text": "Packaging",
+      "translated_text": "包装",
+      "text_type": "translatable",
+      "confidence": 0.998,
+      "bbox": [
+        261,
+        335,
+        316,
+        352
+      ]
+    },
+    {
+      "id": 46,
+      "original_text": "TOPSHITCH",
+      "translated_text": "明线",
+      "text_type": "translatable",
+      "confidence": 0.915,
+      "bbox": [
+        724,
+        437,
+        792,
+        450
+      ]
+    },
+    {
+      "id": 47,
+      "original_text": "Pattern File Name:",
+      "translated_text": "版型文件名",
+      "text_type": "translatable",
+      "confidence": 0.943,
+      "bbox": [
+        370,
+        77,
+        458,
+        87
+      ]
+    },
+    {
+      "id": 48,
+      "original_text": "TOPSTITCH",
+      "translated_text": "明线",
+      "text_type": "translatable",
+      "confidence": 0.997,
+      "bbox": [
+        517,
+        445,
+        584,
+        458
+      ]
+    },
+    {
+      "id": 49,
+      "original_text": "All Seams",
+      "translated_text": "所有缝线",
+      "text_type": "translatable",
+      "confidence": 0.912,
+      "bbox": [
+        263,
+        145,
+        315,
+        161
+      ]
+    },
+    {
+      "id": 50,
+      "original_text": "4From Hem",
+      "translated_text": "4 从下摆",
+      "text_type": "translatable",
+      "confidence": 0.966,
+      "bbox": [
+        257,
+        209,
+        320,
+        222
+      ]
+    },
+    {
+      "id": 51,
+      "original_text": "DOUBLE",
+      "translated_text": "双倍的",
+      "text_type": "translatable",
+      "confidence": 0.997,
+      "bbox": [
+        523,
+        519,
+        574,
+        535
+      ]
+    },
+    {
+      "id": 52,
+      "original_text": "NEEDLE",
+      "translated_text": "针",
+      "text_type": "translatable",
+      "confidence": 0.996,
+      "bbox": [
+        522,
+        534,
+        572,
+        550
+      ]
+    },
+    {
+      "id": 53,
+      "original_text": "SINGLE",
+      "translated_text": "单",
+      "text_type": "translatable",
+      "confidence": 0.998,
+      "bbox": [
+        527,
+        413,
+        574,
+        430
+      ]
+    },
+    {
+      "id": 54,
+      "original_text": "Description",
+      "translated_text": "描述",
+      "text_type": "translatable",
+      "confidence": 0.997,
+      "bbox": [
+        105,
+        116,
+        166,
+        129
+      ]
+    },
+    {
+      "id": 55,
+      "original_text": "YKK:366",
+      "translated_text": "YKK:366",
+      "text_type": "preserve",
+      "confidence": 0.931,
+      "bbox": [
+        400,
+        192,
+        448,
+        208
+      ]
+    },
+    {
+      "id": 56,
+      "original_text": "YKK189",
+      "translated_text": "YKK189",
+      "text_type": "preserve",
+      "confidence": 0.994,
+      "bbox": [
+        471,
+        192,
+        519,
+        208
+      ]
+    },
+    {
+      "id": 57,
+      "original_text": "ZIG ZAC",
+      "translated_text": "锯齿",
+      "text_type": "translatable",
+      "confidence": 0.911,
+      "bbox": [
+        734,
+        421,
+        782,
+        437
+      ]
+    },
+    {
+      "id": 58,
+      "original_text": "Main Fabric",
+      "translated_text": "主面料",
+      "text_type": "translatable",
+      "confidence": 0.979,
+      "bbox": [
+        259,
+        131,
+        317,
+        144
+      ]
+    },
+    {
+      "id": 59,
+      "original_text": "Back Neck",
+      "translated_text": "后领",
+      "text_type": "translatable",
+      "confidence": 0.965,
+      "bbox": [
+        262,
+        177,
+        315,
+        191
+      ]
+    },
+    {
+      "id": 60,
+      "original_text": "Back Neck",
+      "translated_text": "后领",
+      "text_type": "translatable",
+      "confidence": 0.962,
+      "bbox": [
+        262,
+        256,
+        315,
+        270
+      ]
+    },
+    {
+      "id": 61,
+      "original_text": "Colorways:",
+      "translated_text": "配色方案",
+      "text_type": "translatable",
+      "confidence": 0.994,
+      "bbox": [
+        469,
+        76,
+        525,
+        89
+      ]
+    },
+    {
+      "id": 62,
+      "original_text": "Back Neck",
+      "translated_text": "后领",
+      "text_type": "translatable",
+      "confidence": 0.955,
+      "bbox": [
+        262,
+        273,
+        315,
+        286
+      ]
+    },
+    {
+      "id": 63,
+      "original_text": "Natural",
+      "translated_text": "自然色",
+      "text_type": "translatable",
+      "confidence": 0.995,
+      "bbox": [
+        403,
+        208,
+        445,
+        224
+      ]
+    },
+    {
+      "id": 64,
+      "original_text": "Natural",
+      "translated_text": "自然色",
+      "text_type": "translatable",
+      "confidence": 0.993,
+      "bbox": [
+        475,
+        208,
+        517,
+        224
+      ]
+    },
+    {
+      "id": 65,
+      "original_text": "Natural",
+      "translated_text": "自然色",
+      "text_type": "translatable",
+      "confidence": 0.993,
+      "bbox": [
+        335,
+        208,
+        376,
+        224
+      ]
+    },
+    {
+      "id": 66,
+      "original_text": "Blue Light",
+      "translated_text": "浅蓝",
+      "text_type": "translatable",
+      "confidence": 0.962,
+      "bbox": [
+        331,
+        131,
+        380,
+        144
+      ]
+    },
+    {
+      "id": 67,
+      "original_text": "Armholes",
+      "translated_text": "袖窿",
+      "text_type": "translatable",
+      "confidence": 0.99,
+      "bbox": [
+        264,
+        162,
+        313,
+        175
+      ]
+    },
+    {
+      "id": 68,
+      "original_text": "Quantity",
+      "translated_text": "数量",
+      "text_type": "translatable",
+      "confidence": 0.996,
+      "bbox": [
+        553,
+        116,
+        601,
+        129
+      ]
+    },
+    {
+      "id": 69,
+      "original_text": "YKK:316",
+      "translated_text": "YKK:316",
+      "text_type": "preserve",
+      "confidence": 0.941,
+      "bbox": [
+        333,
+        194,
+        378,
+        207
+      ]
+    },
+    {
+      "id": 70,
+      "original_text": "Natural",
+      "translated_text": "自然色",
+      "text_type": "translatable",
+      "confidence": 0.922,
+      "bbox": [
+        333,
+        225,
+        375,
+        238
+      ]
+    },
+    {
+      "id": 71,
+      "original_text": "Yards",
+      "translated_text": "码",
+      "text_type": "translatable",
+      "confidence": 0.999,
+      "bbox": [
+        719,
+        129,
+        751,
+        146
+      ]
+    },
+    {
+      "id": 72,
+      "original_text": "Clear",
+      "translated_text": "透明",
+      "text_type": "translatable",
+      "confidence": 0.995,
+      "bbox": [
+        338,
+        286,
+        370,
+        303
+      ]
+    },
+    {
+      "id": 73,
+      "original_text": "Natural",
+      "translated_text": "自然色",
+      "text_type": "translatable",
+      "confidence": 0.988,
+      "bbox": [
+        475,
+        225,
+        516,
+        238
+      ]
+    },
+    {
+      "id": 74,
+      "original_text": "Natural",
+      "translated_text": "自然色",
+      "text_type": "translatable",
+      "confidence": 0.992,
+      "bbox": [
+        475,
+        241,
+        516,
+        254
+      ]
+    },
+    {
+      "id": 75,
+      "original_text": "Natural",
+      "translated_text": "自然色",
+      "text_type": "translatable",
+      "confidence": 0.991,
+      "bbox": [
+        404,
+        225,
+        444,
+        238
+      ]
+    },
+    {
+      "id": 76,
+      "original_text": "Natural",
+      "translated_text": "自然色",
+      "text_type": "translatable",
+      "confidence": 0.994,
+      "bbox": [
+        335,
+        241,
+        375,
+        254
+      ]
+    },
+    {
+      "id": 77,
+      "original_text": "Natural",
+      "translated_text": "自然色",
+      "text_type": "translatable",
+      "confidence": 0.994,
+      "bbox": [
+        404,
+        241,
+        444,
+        254
+      ]
+    },
+    {
+      "id": 78,
+      "original_text": "18L",
+      "translated_text": "18 L",
+      "text_type": "preserve",
+      "confidence": 0.979,
+      "bbox": [
+        719,
+        192,
+        749,
+        209
+      ]
+    },
+    {
+      "id": 79,
+      "original_text": "Black",
+      "translated_text": "黑色",
+      "text_type": "translatable",
+      "confidence": 0.994,
+      "bbox": [
+        408,
+        177,
+        441,
+        192
+      ]
+    },
+    {
+      "id": 80,
+      "original_text": "White",
+      "translated_text": "白色",
+      "text_type": "translatable",
+      "confidence": 0.997,
+      "bbox": [
+        407,
+        256,
+        440,
+        271
+      ]
+    },
+    {
+      "id": 81,
+      "original_text": "pack",
+      "translated_text": "包",
+      "text_type": "translatable",
+      "confidence": 0.997,
+      "bbox": [
+        454,
+        553,
+        483,
+        570
+      ]
+    },
+    {
+      "id": 82,
+      "original_text": "White",
+      "translated_text": "白色",
+      "text_type": "translatable",
+      "confidence": 0.998,
+      "bbox": [
+        340,
+        177,
+        372,
+        192
+      ]
+    },
+    {
+      "id": 83,
+      "original_text": "Black",
+      "translated_text": "黑色",
+      "text_type": "translatable",
+      "confidence": 0.995,
+      "bbox": [
+        479,
+        177,
+        511,
+        192
+      ]
+    },
+    {
+      "id": 84,
+      "original_text": "White",
+      "translated_text": "白色",
+      "text_type": "translatable",
+      "confidence": 0.998,
+      "bbox": [
+        479,
+        256,
+        511,
+        271
+      ]
+    },
+    {
+      "id": 85,
+      "original_text": "CB",
+      "translated_text": "CB",
+      "text_type": "preserve",
+      "confidence": 0.967,
+      "bbox": [
+        278,
+        192,
+        306,
+        209
+      ]
+    },
+    {
+      "id": 86,
+      "original_text": "Yards",
+      "translated_text": "码",
+      "text_type": "translatable",
+      "confidence": 0.998,
+      "bbox": [
+        719,
+        177,
+        750,
+        192
+      ]
+    },
+    {
+      "id": 87,
+      "original_text": "Beige",
+      "translated_text": "米色",
+      "text_type": "translatable",
+      "confidence": 0.994,
+      "bbox": [
+        478,
+        162,
+        511,
+        176
+      ]
+    },
+    {
+      "id": 88,
+      "original_text": "White",
+      "translated_text": "白色",
+      "text_type": "translatable",
+      "confidence": 0.999,
+      "bbox": [
+        339,
+        256,
+        371,
+        270
+      ]
+    },
+    {
+      "id": 89,
+      "original_text": "White",
+      "translated_text": "白色",
+      "text_type": "translatable",
+      "confidence": 0.997,
+      "bbox": [
+        408,
+        273,
+        440,
+        287
+      ]
+    },
+    {
+      "id": 90,
+      "original_text": "White",
+      "translated_text": "白色",
+      "text_type": "translatable",
+      "confidence": 0.997,
+      "bbox": [
+        479,
+        273,
+        511,
+        287
+      ]
+    },
+    {
+      "id": 91,
+      "original_text": "image",
+      "translated_text": "图像",
+      "text_type": "translatable",
+      "confidence": 0.998,
+      "bbox": [
+        456,
+        567,
+        488,
+        581
+      ]
+    },
+    {
+      "id": 92,
+      "original_text": "Design",
+      "translated_text": "设计",
+      "text_type": "translatable",
+      "confidence": 0.877,
+      "bbox": [
+        626,
+        473,
+        660,
+        486
+      ]
+    },
+    {
+      "id": 93,
+      "original_text": "Design",
+      "translated_text": "设计",
+      "text_type": "translatable",
+      "confidence": 0.999,
+      "bbox": [
+        455,
+        544,
+        489,
+        557
+      ]
+    },
+    {
+      "id": 94,
+      "original_text": "Beige",
+      "translated_text": "米色",
+      "text_type": "translatable",
+      "confidence": 0.997,
+      "bbox": [
+        409,
+        162,
+        440,
+        176
+      ]
+    },
+    {
+      "id": 95,
+      "original_text": "Yards",
+      "translated_text": "码",
+      "text_type": "translatable",
+      "confidence": 0.998,
+      "bbox": [
+        719,
+        162,
+        750,
+        176
+      ]
+    },
+    {
+      "id": 96,
+      "original_text": "Clear",
+      "translated_text": "透明",
+      "text_type": "translatable",
+      "confidence": 0.996,
+      "bbox": [
+        409,
+        288,
+        440,
+        302
+      ]
+    },
+    {
+      "id": 97,
+      "original_text": "Clear",
+      "translated_text": "透明",
+      "text_type": "translatable",
+      "confidence": 0.997,
+      "bbox": [
+        409,
+        304,
+        440,
+        318
+      ]
+    },
+    {
+      "id": 98,
+      "original_text": "Beige",
+      "translated_text": "米色",
+      "text_type": "translatable",
+      "confidence": 0.997,
+      "bbox": [
+        409,
+        320,
+        440,
+        334
+      ]
+    },
+    {
+      "id": 99,
+      "original_text": "Beige",
+      "translated_text": "米色",
+      "text_type": "translatable",
+      "confidence": 0.996,
+      "bbox": [
+        479,
+        320,
+        510,
+        334
+      ]
+    },
+    {
+      "id": 100,
+      "original_text": "Beige",
+      "translated_text": "米色",
+      "text_type": "translatable",
+      "confidence": 0.996,
+      "bbox": [
+        340,
+        162,
+        370,
+        176
+      ]
+    },
+    {
+      "id": 101,
+      "original_text": "Each",
+      "translated_text": "每个",
+      "text_type": "translatable",
+      "confidence": 0.999,
+      "bbox": [
+        721,
+        256,
+        749,
+        271
+      ]
+    },
+    {
+      "id": 102,
+      "original_text": "Clear",
+      "translated_text": "透明",
+      "text_type": "translatable",
+      "confidence": 0.998,
+      "bbox": [
+        341,
+        304,
+        371,
+        318
+      ]
+    },
+    {
+      "id": 103,
+      "original_text": "Clear",
+      "translated_text": "透明",
+      "text_type": "translatable",
+      "confidence": 0.996,
+      "bbox": [
+        480,
+        304,
+        510,
+        318
+      ]
+    },
+    {
+      "id": 104,
+      "original_text": "Each",
+      "translated_text": "每个",
+      "text_type": "translatable",
+      "confidence": 0.998,
+      "bbox": [
+        721,
+        336,
+        749,
+        351
+      ]
+    },
+    {
+      "id": 105,
+      "original_text": "Clear",
+      "translated_text": "透明",
+      "text_type": "translatable",
+      "confidence": 0.996,
+      "bbox": [
+        481,
+        288,
+        510,
+        302
+      ]
+    },
+    {
+      "id": 106,
+      "original_text": "Beige",
+      "translated_text": "米色",
+      "text_type": "translatable",
+      "confidence": 0.997,
+      "bbox": [
+        341,
+        320,
+        370,
+        334
+      ]
+    },
+    {
+      "id": 107,
+      "original_text": "White",
+      "translated_text": "白色",
+      "text_type": "translatable",
+      "confidence": 0.998,
+      "bbox": [
+        340,
+        273,
+        371,
+        286
+      ]
+    },
+    {
+      "id": 108,
+      "original_text": "Each",
+      "translated_text": "每个",
+      "text_type": "translatable",
+      "confidence": 0.998,
+      "bbox": [
+        721,
+        209,
+        749,
+        223
+      ]
+    },
+    {
+      "id": 109,
+      "original_text": "Each",
+      "translated_text": "每个",
+      "text_type": "translatable",
+      "confidence": 0.999,
+      "bbox": [
+        721,
+        225,
+        749,
+        239
+      ]
+    },
+    {
+      "id": 110,
+      "original_text": "image",
+      "translated_text": "图像",
+      "text_type": "translatable",
+      "confidence": 0.995,
+      "bbox": [
+        626,
+        496,
+        656,
+        509
+      ]
+    },
+    {
+      "id": 111,
+      "original_text": "N/A",
+      "translated_text": "N/A",
+      "text_type": "preserve",
+      "confidence": 0.997,
+      "bbox": [
+        483,
+        335,
+        507,
+        351
+      ]
+    },
+    {
+      "id": 112,
+      "original_text": "DTM",
+      "translated_text": "DTM",
+      "text_type": "preserve",
+      "confidence": 0.994,
+      "bbox": [
+        411,
+        146,
+        438,
+        160
+      ]
+    },
+    {
+      "id": 113,
+      "original_text": "DTM",
+      "translated_text": "DTM",
+      "text_type": "preserve",
+      "confidence": 0.987,
+      "bbox": [
+        482,
+        146,
+        509,
+        160
+      ]
+    },
+    {
+      "id": 114,
+      "original_text": "Each",
+      "translated_text": "每个",
+      "text_type": "translatable",
+      "confidence": 0.999,
+      "bbox": [
+        721,
+        273,
+        748,
+        287
+      ]
+    },
+    {
+      "id": 115,
+      "original_text": "'ach",
+      "translated_text": "阿赫",
+      "text_type": "translatable",
+      "confidence": 0.9,
+      "bbox": [
+        722,
+        304,
+        749,
+        318
+      ]
+    },
+    {
+      "id": 116,
+      "original_text": "Each",
+      "translated_text": "每个",
+      "text_type": "translatable",
+      "confidence": 0.999,
+      "bbox": [
+        721,
+        320,
+        748,
+        334
+      ]
+    },
+    {
+      "id": 117,
+      "original_text": "Cost",
+      "translated_text": "成本",
+      "text_type": "translatable",
+      "confidence": 0.999,
+      "bbox": [
+        640,
+        115,
+        666,
+        129
+      ]
+    },
+    {
+      "id": 118,
+      "original_text": "DTM",
+      "translated_text": "DTM",
+      "text_type": "preserve",
+      "confidence": 0.995,
+      "bbox": [
+        343,
+        146,
+        369,
+        160
+      ]
+    },
+    {
+      "id": 119,
+      "original_text": "Each",
+      "translated_text": "每个",
+      "text_type": "translatable",
+      "confidence": 0.998,
+      "bbox": [
+        721,
+        241,
+        749,
+        254
+      ]
+    },
+    {
+      "id": 120,
+      "original_text": "N/A",
+      "translated_text": "N/A",
+      "text_type": "preserve",
+      "confidence": 0.997,
+      "bbox": [
+        412,
+        335,
+        436,
+        350
+      ]
+    },
+    {
+      "id": 121,
+      "original_text": "CB",
+      "translated_text": "CB",
+      "text_type": "preserve",
+      "confidence": 0.984,
+      "bbox": [
+        275,
+        240,
+        300,
+        254
+      ]
+    },
+    {
+      "id": 122,
+      "original_text": "N/A",
+      "translated_text": "N/A",
+      "text_type": "preserve",
+      "confidence": 0.999,
+      "bbox": [
+        344,
+        335,
+        366,
+        350
+      ]
+    },
+    {
+      "id": 123,
+      "original_text": "CB",
+      "translated_text": "CB",
+      "text_type": "preserve",
+      "confidence": 0.986,
+      "bbox": [
+        279,
+        224,
+        300,
+        239
+      ]
+    },
+    {
+      "id": 124,
+      "original_text": "pack",
+      "translated_text": "包",
+      "text_type": "translatable",
+      "confidence": 0.994,
+      "bbox": [
+        629,
+        486,
+        651,
+        498
+      ]
+    },
+    {
+      "id": 125,
+      "original_text": "1",
+      "translated_text": "1",
+      "text_type": "preserve",
+      "confidence": 0.996,
+      "bbox": [
+        569,
+        241,
+        582,
+        254
+      ]
+    },
+    {
+      "id": 126,
+      "original_text": "1",
+      "translated_text": "1",
+      "text_type": "preserve",
+      "confidence": 0.996,
+      "bbox": [
+        570,
+        194,
+        582,
+        208
+      ]
+    },
+    {
+      "id": 127,
+      "original_text": "1",
+      "translated_text": "1",
+      "text_type": "preserve",
+      "confidence": 0.996,
+      "bbox": [
+        570,
+        256,
+        582,
+        270
+      ]
+    },
+    {
+      "id": 128,
+      "original_text": "1",
+      "translated_text": "1",
+      "text_type": "preserve",
+      "confidence": 0.997,
+      "bbox": [
+        570,
+        209,
+        582,
+        222
+      ]
+    },
+    {
+      "id": 129,
+      "original_text": "1",
+      "translated_text": "1",
+      "text_type": "preserve",
+      "confidence": 0.995,
+      "bbox": [
+        570,
+        225,
+        582,
+        238
+      ]
+    },
+    {
+      "id": 130,
+      "original_text": "1",
+      "translated_text": "1",
+      "text_type": "preserve",
+      "confidence": 0.996,
+      "bbox": [
+        571,
+        273,
+        582,
+        286
+      ]
+    },
+    {
+      "id": 131,
+      "original_text": "1",
+      "translated_text": "1",
+      "text_type": "preserve",
+      "confidence": 0.948,
+      "bbox": [
+        572,
+        289,
+        580,
+        301
+      ]
+    },
+    {
+      "id": 132,
+      "original_text": "1",
+      "translated_text": "1",
+      "text_type": "preserve",
+      "confidence": 0.923,
+      "bbox": [
+        572,
+        305,
+        580,
+        317
+      ]
+    },
+    {
+      "id": 133,
+      "original_text": "1",
+      "translated_text": "1",
+      "text_type": "preserve",
+      "confidence": 0.94,
+      "bbox": [
+        572,
+        338,
+        579,
+        349
+      ]
+    }
+  ],
+  "design_pack_regions": [
+    {
+      "id": 0,
+      "bbox": [
+        827,
+        52,
+        1177,
+        352
+      ],
+      "confidence": 0.777,
+      "detection_method": "entropy"
+    },
+    {
+      "id": 1,
+      "bbox": [
+        0,
+        88,
+        788,
+        375
+      ],
+      "confidence": 0.52,
+      "detection_method": "edge_density"
+    }
+  ],
+  "processing_time_seconds": 13.27
+}

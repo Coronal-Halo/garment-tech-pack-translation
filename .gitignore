@@ -36,11 +36,11 @@ env/
 *.swo
 *~
 
-# Input/Output files (regenerated/samples)
-inputs/*
-!inputs/.gitkeep
-outputs/*
-!outputs/.gitkeep
+# Input/Output files are included in this repository
+
+
+
+
 
 # Environment variables (contain secrets)
 .env
