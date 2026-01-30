@@ -9,23 +9,25 @@ services:
       dockerfile: Dockerfile
     image: techpack-translator:latest
     container_name: techpack-translator
-    
-    # Mount volumes for input/output
+
+    # Mount volumes for input/output and model caching
     volumes:
-      - ./inputs:/app/inputs:ro    # Input images (read-only)
-      - ./outputs:/app/outputs     # Output images
-      - ./config:/app/config:ro    # Configuration (read-only)
-      - ./assets:/app/assets:ro    # Fonts and assets (read-only)
-    
+      - ./inputs:/app/inputs:ro # Input images (read-only)
+      - ./outputs:/app/outputs # Output images
+      - ./config:/app/config:ro # Configuration (read-only)
+      - ./assets:/app/assets:ro # Fonts and assets (read-only)
+      - paddle_cache:/root/.paddleocr # Persist PaddleOCR models
+      - hf_cache:/root/.cache/huggingface # Persist HuggingFace models
+
     # Environment variables (for API keys)
     environment:
       - GOOGLE_TRANSLATE_API_KEY=${GOOGLE_TRANSLATE_API_KEY:-}
       - DEEPL_API_KEY=${DEEPL_API_KEY:-}
       - PYTHONPATH=/app
-    
+
     # Default command - override when running
-    command: ["--help"]
-    
+    command: [ "--help" ]
+
     # Resource limits
     deploy:
       resources:
@@ -41,24 +43,29 @@ services:
       dockerfile: Dockerfile
     image: techpack-translator:latest
     container_name: techpack-dev
-    
+
     volumes:
       - ./:/app
-    
+
     environment:
       - GOOGLE_TRANSLATE_API_KEY=${GOOGLE_TRANSLATE_API_KEY:-}
       - DEEPL_API_KEY=${DEEPL_API_KEY:-}
       - PYTHONPATH=/app
-    
+
     # Interactive shell
     stdin_open: true
     tty: true
-    entrypoint: ["/bin/bash"]
-    
+    entrypoint: [ "/bin/bash" ]
+
     profiles:
       - dev
 
-# Networks (optional, for future expansion)
+# Networks
 networks:
   default:
     name: techpack-network
+
+# Named volumes for persistence
+volumes:
+  paddle_cache:
+  hf_cache:

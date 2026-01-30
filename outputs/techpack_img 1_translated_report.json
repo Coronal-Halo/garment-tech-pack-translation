@@ -4,7 +4,7 @@
     "translated_regions": 134,
     "preserved_regions": 22,
     "design_pack_regions": 2,
-    "processing_time_seconds": 13.27,
+    "processing_time_seconds": 9.5,
     "image_dimensions": {
       "width": 1197,
       "height": 681
@@ -586,7 +586,7 @@
     {
       "id": 44,
       "original_text": "NEEDLE",
-      "translated_text": "NEEDLE",
+      "translated_text": "针",
       "text_type": "translatable",
       "confidence": 0.997,
       "bbox": [
@@ -677,7 +677,7 @@
     {
       "id": 51,
       "original_text": "DOUBLE",
-      "translated_text": "双倍的",
+      "translated_text": "双",
       "text_type": "translatable",
       "confidence": 0.997,
       "bbox": [
@@ -1778,5 +1778,5 @@
       "detection_method": "edge_density"
     }
   ],
-  "processing_time_seconds": 13.27
+  "processing_time_seconds": 9.5
 }

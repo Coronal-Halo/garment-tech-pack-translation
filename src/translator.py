@@ -82,22 +82,32 @@ class GoogleTranslateBackend(TranslationBackend):
             target = "zh-cn" if target_lang.lower() == "zh-cn" else target_lang
             source = "en" if source_lang.lower() == "en" else source_lang
             
-            # googletrans 4.0.0-rc1+ usually returns a coroutine, but check for safety
-            coro = self.translator.translate(text, src=source, dest=target)
+            # Step 1: Attempt the translation
+            # googletrans 4.0.0-rc1 is inconsistent across environments
+            result = self.translator.translate(text, src=source, dest=target)
             
-            # Use inspect or just check if it's awaitable
+            # Step 2: Extract result defensively
+            # If it's a coroutine/awaitable, we must run it in the loop
             import inspect
-            if inspect.isawaitable(coro):
-                result = self._loop.run_until_complete(coro)
-            else:
-                result = coro
+            if inspect.isawaitable(result):
+                try:
+                    result = self._loop.run_until_complete(result)
+                except Exception as loop_err:
+                    logger.warning(f"Failed to run Google Translate coroutine: {loop_err}")
+                    # If it failed but the object has .text, use it anyway (some forks)
+                    if not hasattr(result, 'text'):
+                        return text
             
-            translated_text = result.text
-            if translated_text and translated_text != text:
-                logger.debug(f"Google Translate success: '{text[:20]}...' -> '{translated_text[:20]}...'")
-            return translated_text
+            # Step 3: Verify we have a result object with a 'text' attribute
+            if hasattr(result, 'text'):
+                translated_text = result.text
+                if translated_text and translated_text != text:
+                    logger.debug(f"Google Translate success: '{text[:20]}...' -> '{translated_text[:20]}...'")
+                return translated_text
+            
+            return text
         except Exception as e:
-            logger.warning(f"Google Translate API timeout/error: {e}. Falling back to DeepL API...")
+            logger.warning(f"Google Translate API failed: {e}. Falling back to DeepL API...")
             return text
 
 
@@ -519,7 +529,21 @@ class OfflineGlossaryBackend(TranslationBackend):
         "height": "高度",
         "depth": "深度",
         "diameter": "直径",
+        "width": "宽度",
+        "length": "长度",
+        "height": "高度",
+        "depth": "深度",
+        "diameter": "直径",
         "circumference": "周长",
+        
+        # Capitalized versions for fragmented OCR
+        "NEEDLE": "针",
+        "THREAD": "线",
+        "STITCHING": "缝合",
+        "DOUBLE": "双",
+        "SINGLE": "单",
+        "TOPSTITCH": "明线",
+        "TOPSTITCHING": "明线",
         
         # Design pack
         "design pack image": "设计图",
